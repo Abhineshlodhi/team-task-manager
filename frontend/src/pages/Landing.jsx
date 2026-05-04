@@ -25,7 +25,7 @@ const features = [
   {
     icon: '📊',
     title: 'Progress Tracking',
-    desc: 'Get a bird's-eye view of all your tasks — how many are done, in progress, or still waiting.',
+    desc: `Get a bird's-eye view of all your tasks — how many are done, in progress, or still waiting.`,
   },
   {
     icon: '🔑',
