@@ -93,8 +93,12 @@ class DashboardStatsView(APIView):
         completed_tasks = tasks.filter(status='Completed').count()
         pending_tasks = tasks.filter(status__in=['Todo', 'In Progress']).count()
         
+        from django.utils import timezone
+        overdue_tasks = tasks.filter(due_date__lt=timezone.now().date()).exclude(status='Completed').count()
+        
         return Response({
             'total': total_tasks,
             'completed': completed_tasks,
             'pending': pending_tasks,
+            'overdue': overdue_tasks,
         })

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
-  const [stats, setStats] = useState({ total: 0, completed: 0, pending: 0 });
+  const [stats, setStats] = useState({ total: 0, completed: 0, pending: 0, overdue: 0 });
 
   useEffect(() => {
     api.get('/dashboard/stats/')
@@ -37,7 +37,7 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <div className="bg-white overflow-hidden rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center justify-center hover:shadow-md transition">
             <dt className="truncate text-sm font-medium text-gray-500">Total Tasks</dt>
             <dd className="mt-2 text-4xl font-extrabold text-gray-900">{stats.total}</dd>
@@ -49,6 +49,10 @@ const Dashboard = () => {
           <div className="bg-white overflow-hidden rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col items-center justify-center hover:shadow-md transition">
             <dt className="truncate text-sm font-medium text-gray-500">Pending</dt>
             <dd className="mt-2 text-4xl font-extrabold text-amber-500">{stats.pending}</dd>
+          </div>
+          <div className="bg-white overflow-hidden rounded-2xl shadow-sm border border-red-100 p-6 flex flex-col items-center justify-center hover:shadow-md transition bg-red-50/30">
+            <dt className="truncate text-sm font-medium text-red-500">Overdue</dt>
+            <dd className="mt-2 text-4xl font-extrabold text-red-600">{stats.overdue}</dd>
           </div>
         </div>
       </main>

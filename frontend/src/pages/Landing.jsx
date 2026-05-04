@@ -95,7 +95,7 @@ export default function Landing() {
             Log In
           </button>
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/register')}
             style={{
               padding: '0.5rem 1.25rem', borderRadius: 8,
               background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
@@ -176,7 +176,7 @@ export default function Landing() {
 
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/register')}
               style={{
                 padding: '0.85rem 2rem', borderRadius: 12,
                 background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
@@ -328,7 +328,7 @@ export default function Landing() {
             Join your team on TaskFlow and start shipping faster today.
           </p>
           <button
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/register')}
             style={{
               padding: '1rem 2.5rem', borderRadius: 14,
               background: 'linear-gradient(135deg,#6366f1,#8b5cf6)',
