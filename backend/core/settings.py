@@ -12,6 +12,15 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-replace-in-pro
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['*'] # Change in production
 
+# Production Security & Proxy Settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+trusted_origins = os.getenv('CSRF_TRUSTED_ORIGINS')
+if trusted_origins:
+    CSRF_TRUSTED_ORIGINS = trusted_origins.split(',')
+else:
+    CSRF_TRUSTED_ORIGINS = ['https://team-task-manager-production-b22d.up.railway.app']
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -64,12 +73,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database Setup (Default SQLite for dev if MySQL fails, but we prepare for MySQL)
-DB_ENGINE = os.getenv('DATABASE_ENGINE', 'django.db.backends.mysql' if os.getenv('DATABASE_NAME') else 'django.db.backends.sqlite3')
-DB_NAME = os.getenv('DATABASE_NAME', BASE_DIR / 'db.sqlite3')
-DB_USER = os.getenv('DATABASE_USER', '')
-DB_PASSWORD = os.getenv('DATABASE_PASSWORD', '')
-DB_HOST = os.getenv('DATABASE_HOST', '')
-DB_PORT = os.getenv('DATABASE_PORT', '')
+DB_ENGINE = 'django.db.backends.mysql' if (os.getenv('MYSQLDATABASE') or os.getenv('DATABASE_NAME')) else 'django.db.backends.sqlite3'
+DB_NAME = os.getenv('MYSQLDATABASE') or os.getenv('DATABASE_NAME', BASE_DIR / 'db.sqlite3')
+DB_USER = os.getenv('MYSQLUSER') or os.getenv('DATABASE_USER', '')
+DB_PASSWORD = os.getenv('MYSQLPASSWORD') or os.getenv('DATABASE_PASSWORD', '')
+DB_HOST = os.getenv('MYSQLHOST') or os.getenv('DATABASE_HOST', '')
+DB_PORT = os.getenv('MYSQLPORT') or os.getenv('DATABASE_PORT', '')
 
 if DB_ENGINE == 'django.db.backends.sqlite3':
     DATABASES = {
