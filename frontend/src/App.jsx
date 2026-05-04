@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ProjectList from './pages/ProjectList';
 import ProjectDetail from './pages/ProjectDetail';
+import Landing from './pages/Landing';
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = React.useContext(AuthContext);
@@ -16,14 +17,16 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-            <Route path="/projects" element={<PrivateRoute><ProjectList /></PrivateRoute>} />
-            <Route path="/projects/:id" element={<PrivateRoute><ProjectDetail /></PrivateRoute>} />
-          </Routes>
-        </div>
+        <Routes>
+          {/* Public landing page */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* Protected routes */}
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/projects" element={<PrivateRoute><ProjectList /></PrivateRoute>} />
+          <Route path="/projects/:id" element={<PrivateRoute><ProjectDetail /></PrivateRoute>} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
