@@ -21,7 +21,7 @@ const ProjectList = () => {
             <h2 className="text-3xl font-bold text-gray-900">Projects</h2>
             <p className="mt-1 text-sm text-gray-500">Manage your projects and team members.</p>
           </div>
-          <Link to="/" className="text-sm font-medium text-primary-600 hover:text-primary-500">
+          <Link to="/dashboard" className="text-sm font-medium text-primary-600 hover:text-primary-500">
             &larr; Back to Dashboard
           </Link>
         </div>
