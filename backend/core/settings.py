@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
+import dj_database_url
 
 # Load env variables
 load_dotenv()
@@ -72,30 +73,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-# Database Setup (Default SQLite for dev if MySQL fails, but we prepare for MySQL)
-DB_ENGINE = 'django.db.backends.mysql' if (os.getenv('MYSQLDATABASE') or os.getenv('DATABASE_NAME')) else 'django.db.backends.sqlite3'
-DB_NAME = os.getenv('MYSQLDATABASE') or os.getenv('DATABASE_NAME', BASE_DIR / 'db.sqlite3')
-DB_USER = os.getenv('MYSQLUSER') or os.getenv('DATABASE_USER', '')
-DB_PASSWORD = os.getenv('MYSQLPASSWORD') or os.getenv('DATABASE_PASSWORD', '')
-DB_HOST = os.getenv('MYSQLHOST') or os.getenv('DATABASE_HOST', '')
-DB_PORT = os.getenv('MYSQLPORT') or os.getenv('DATABASE_PORT', '')
+# Database Setup
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-if DB_ENGINE == 'django.db.backends.sqlite3':
+if DATABASE_URL:
     DATABASES = {
-        'default': {
-            'ENGINE': DB_ENGINE,
-            'NAME': DB_NAME,
-        }
+        'default': dj_database_url.parse(DATABASE_URL)
     }
 else:
+    DB_ENGINE = 'django.db.backends.mysql' if os.getenv('DATABASE_NAME') else 'django.db.backends.sqlite3'
     DATABASES = {
         'default': {
             'ENGINE': DB_ENGINE,
-            'NAME': DB_NAME,
-            'USER': DB_USER,
-            'PASSWORD': DB_PASSWORD,
-            'HOST': DB_HOST,
-            'PORT': DB_PORT,
+            'NAME': os.getenv('DATABASE_NAME', BASE_DIR / 'db.sqlite3'),
+            'USER': os.getenv('DATABASE_USER', ''),
+            'PASSWORD': os.getenv('DATABASE_PASSWORD', ''),
+            'HOST': os.getenv('DATABASE_HOST', ''),
+            'PORT': os.getenv('DATABASE_PORT', ''),
         }
     }
 
