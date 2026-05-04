@@ -1,247 +1,349 @@
-# 🚀 Team Task Manager
+<div align="center">
 
-A production-ready full-stack Team Task Manager web application. This application allows users to create projects, assign tasks to team members, track progress through a dynamic Kanban board, and view at-a-glance analytics via a dashboard.
+# ⚡ TaskFlow — Team Task Manager
+
+**A full-stack project management platform built for modern teams.**  
+Kanban-style task boards, role-based access, JWT authentication, and real-time progress tracking.
+
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Vercel-black?style=for-the-badge)](https://team-task-manager-sigma-henna.vercel.app/)
+[![Backend API](https://img.shields.io/badge/⚙️_Backend_API-Railway-purple?style=for-the-badge)](https://team-task-manager-production-b22d.up.railway.app/api/)
+[![Admin Panel](https://img.shields.io/badge/🔐_Admin_Panel-Django-green?style=for-the-badge)](https://team-task-manager-production-b22d.up.railway.app/admin/)
+[![GitHub](https://img.shields.io/badge/📦_Source_Code-GitHub-gray?style=for-the-badge)](https://github.com/Abhineshlodhi/team-task-manager)
+
+</div>
 
 ---
 
-## 🧱 Tech Stack
+## 🚀 Live Deployment
 
-### Backend
-- **Python 3.10+**
-- **Django 4.2+** (High-level Python web framework)
-- **Django REST Framework (DRF)** (For building secure RESTful APIs)
-- **djangorestframework-simplejwt** (For JWT Authentication)
-- **MySQL** (Primary Database)
-- **WhiteNoise** (For serving static files in production)
+| Service | URL | Platform |
+|---------|-----|----------|
+| 🌐 Frontend | https://team-task-manager-sigma-henna.vercel.app/ | Vercel |
+| ⚙️ Backend API | https://team-task-manager-production-b22d.up.railway.app/api/ | Railway |
+| 🔐 Admin Panel | https://team-task-manager-production-b22d.up.railway.app/admin/ | Railway |
+| 🗄️ Database | PostgreSQL | Railway |
 
-### Frontend
-- **React.js 18+** (UI Library)
-- **Vite** (Next Generation Frontend Tooling)
-- **Tailwind CSS v4** (Utility-first CSS framework)
-- **React Router Dom v6** (For seamless page routing)
-- **Axios** (For making API requests with JWT interceptors)
+---
 
-### Deployment
-- **Railway.app** (Automated deployment for full-stack monorepos)
+## 📋 Table of Contents
+
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Local Development Setup](#-local-development-setup)
+- [Environment Variables](#-environment-variables)
+- [API Reference](#-api-reference)
+- [Deployment Guide](#-deployment-guide)
+- [Screenshots](#-screenshots)
 
 ---
 
 ## ✨ Features
 
-- **Authentication:** Secure Login/Registration using JSON Web Tokens (JWT).
-- **Role-Based Access Control (RBAC):**
-  - **Admin:** Has full control. Can create projects, add/remove members, and create tasks.
-  - **Member:** Can only view projects they are assigned to, and can update the status of tasks on the Kanban board.
-- **Project Management:** Admins can create isolated projects and assign multiple users to them.
-- **Kanban Task Board:** Tasks can be dragged or dropdown-selected between `Todo`, `In Progress`, and `Completed` columns.
-- **Dashboard Analytics:** Displays a dynamic overview of total tasks, completed tasks, and pending tasks tailored to the logged-in user.
-- **Modern UI/UX:** Built with Tailwind CSS, featuring a responsive, clean, and interactive design.
+- 🔐 **JWT Authentication** — Secure login with access + refresh tokens
+- 👥 **Role-Based Access** — Admin and Member roles with separate permissions
+- 📋 **Kanban Task Boards** — Visual task management with Todo / In Progress / Done columns
+- 📊 **Dashboard Stats** — Total tasks, completed, and pending counts at a glance
+- 🏗️ **Project Management** — Create and manage multiple projects with team members
+- 🎨 **Beautiful Landing Page** — Dark-themed, animated landing page with feature showcase
+- 📱 **Responsive Design** — Works perfectly on desktop, tablet, and mobile
+- ⚡ **Fast API** — Django REST Framework with no pagination for instant data loading
 
 ---
 
-## 📂 Folder Structure
+## 🛠️ Tech Stack
 
-This project follows a **Monorepo** structure, meaning both the backend and frontend exist within the same repository.
+### Backend
+| Technology | Purpose |
+|-----------|---------|
+| Python 3.13 | Core language |
+| Django 4.2 | Web framework |
+| Django REST Framework | API layer |
+| djangorestframework-simplejwt | JWT authentication |
+| django-cors-headers | Cross-origin request handling |
+| psycopg2-binary | PostgreSQL driver |
+| gunicorn | Production WSGI server |
+| whitenoise | Static file serving |
+| dj-database-url | Database URL parsing |
+| python-dotenv | Environment variable loading |
 
-```text
-/task-manager
-│── /backend                 # Django API
-│   ├── /core                # Main Django settings, urls, wsgi
-│   ├── /apps
-│   │   ├── /users           # Custom User model and Auth APIs
-│   │   └── /projects        # Project/Task models and Business logic APIs
-│   ├── manage.py            # Django execution script
-│   ├── requirements.txt     # Python dependencies
-│   └── .env                 # Database and environment variables
+### Frontend
+| Technology | Purpose |
+|-----------|---------|
+| React 18 | UI framework |
+| Vite | Build tool & dev server |
+| React Router DOM | Client-side routing |
+| Axios | HTTP requests |
+| Tailwind CSS v4 | Utility-first styling |
+| Context API | Global state management |
+
+### Infrastructure
+| Service | Purpose |
+|---------|---------|
+| Railway | Backend + PostgreSQL database hosting |
+| Vercel | Frontend hosting + CDN |
+| GitHub | Source control + CI/CD trigger |
+
+---
+
+## 📁 Project Structure
+
+```
+task-manager/
+├── backend/                    # Django REST API
+│   ├── core/                   # Project settings & URLs
+│   │   ├── settings.py         # Main settings (env-based config)
+│   │   ├── urls.py             # Root URL configuration
+│   │   └── wsgi.py             # WSGI application entry point
+│   ├── users/                  # Custom user authentication app
+│   │   ├── models.py           # Custom User model (email-based)
+│   │   ├── serializers.py      # User & Registration serializers
+│   │   ├── views.py            # Register, Login, User detail views
+│   │   ├── urls.py             # Auth URL patterns
+│   │   └── admin.py            # Admin panel configuration
+│   ├── projects/               # Projects & Tasks app
+│   │   ├── models.py           # Project, ProjectMember, Task models
+│   │   ├── serializers.py      # Project & Task serializers
+│   │   ├── views.py            # Project & Task CRUD views
+│   │   ├── urls.py             # Project URL patterns
+│   │   └── admin.py            # Admin panel configuration
+│   ├── .env                    # ⚠️ Local secrets (NOT in git)
+│   ├── .env.example            # ✅ Template for environment variables
+│   ├── requirements.txt        # Python dependencies
+│   └── manage.py               # Django management script
 │
-│── /frontend                # React SPA
-│   ├── /public              # Static public assets
-│   ├── /src                 
-│   │   ├── /components      # Reusable UI components (TaskBoard, etc.)
-│   │   ├── /context         # React Context (AuthContext for global state)
-│   │   ├── /pages           # App screens (Login, Dashboard, ProjectList, etc.)
-│   │   ├── /services        # Axios configuration with JWT interceptors
-│   │   ├── App.jsx          # Main App routing
-│   │   └── index.css        # Tailwind v4 theme and styles
-│   ├── package.json         # Node dependencies
-│   └── vite.config.js       # Vite configuration
+├── frontend/                   # React + Vite application
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── Landing.jsx     # Public landing page
+│   │   │   ├── Login.jsx       # Authentication page
+│   │   │   ├── Dashboard.jsx   # Main dashboard with stats
+│   │   │   ├── ProjectList.jsx # All projects view
+│   │   │   └── ProjectDetail.jsx # Kanban board for a project
+│   │   ├── components/
+│   │   │   └── TaskBoard.jsx   # Kanban board component
+│   │   ├── context/
+│   │   │   └── AuthContext.jsx # Global auth state (JWT management)
+│   │   ├── services/
+│   │   │   └── api.js          # Axios instance with JWT interceptors
+│   │   ├── App.jsx             # Root component with routing
+│   │   └── main.jsx            # React entry point
+│   ├── .env                    # ⚠️ Local env (NOT in git)
+│   ├── package.json            # Node dependencies
+│   └── vite.config.js          # Vite configuration
 │
-└── README.md                # Project documentation
+├── .gitignore                  # Git ignore rules
+└── README.md                   # This file
 ```
 
 ---
 
-## 🛠️ Step-by-Step Local Setup Instructions
+## 💻 Local Development Setup
 
-Follow these exact steps to run the application on your local machine.
+### Prerequisites
+- Python 3.10+
+- Node.js 18+
+- MySQL or PostgreSQL running locally
+- Git
 
-### 1. Prerequisites
-Before you begin, ensure you have the following installed:
-- [Python (3.10 or higher)](https://www.python.org/downloads/)
-- [Node.js (18 or higher)](https://nodejs.org/en/download/)
-- MySQL Server (or XAMPP/WAMP if preferred). Note: The app defaults to SQLite if MySQL is not configured.
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Abhineshlodhi/team-task-manager.git
+cd team-task-manager
+```
 
----
+### 2. Backend Setup
 
-### 2. Backend Setup (Django)
+```bash
+# Navigate to backend
+cd backend
 
-1. **Navigate to the Backend Directory:**
-   ```bash
-   cd backend
-   ```
+# Create and activate virtual environment
+python -m venv venv
 
-2. **Create a Virtual Environment:**
-   This isolates the Python dependencies from your global system.
-   ```bash
-   python -m venv venv
-   ```
+# Windows
+.\venv\Scripts\activate
 
-3. **Activate the Virtual Environment:**
-   - **Windows:**
-     ```bash
-     .\venv\Scripts\activate
-     ```
-   - **macOS/Linux:**
-     ```bash
-     source venv/bin/activate
-     ```
+# Mac/Linux
+source venv/bin/activate
 
-4. **Install Python Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+# Install dependencies
+pip install -r requirements.txt
 
-5. **Configure the Database (`.env` file):**
-   By default, the backend will use SQLite. If you want to use MySQL, create a `.env` file in the `/backend` folder with your credentials:
-   ```env
-   DATABASE_NAME=ethara
-   DATABASE_USER=root
-   DATABASE_PASSWORD=your_mysql_password
-   DATABASE_HOST=localhost
-   DATABASE_PORT=3306
-   ```
+# Create your environment file
+cp .env.example .env
+# Edit .env with your local database credentials (see below)
 
-6. **Apply Database Migrations:**
-   This creates the tables in your database.
-   ```bash
-   python manage.py makemigrations users projects
-   python manage.py migrate
-   ```
+# Run database migrations
+python manage.py migrate
 
-7. **Create an Admin User:**
-   You need an Admin account to access the Django Admin Panel and create your first projects.
-   ```bash
-   python manage.py createsuperuser
-   ```
-   *(Follow the prompts to enter an email and password)*
+# Create a superuser (admin account)
+python manage.py createsuperuser
 
-8. **Start the Django Development Server:**
-   ```bash
-   python manage.py runserver
-   ```
-   The backend API is now running at `http://127.0.0.1:8000/`. Keep this terminal window open.
+# Start the development server
+python manage.py runserver
+```
+
+Backend will be running at: `http://127.0.0.1:8000`
+
+### 3. Frontend Setup
+
+```bash
+# Open a new terminal and navigate to frontend
+cd frontend
+
+# Install dependencies
+npm install
+
+# Create your environment file
+echo "VITE_API_BASE_URL=http://127.0.0.1:8000/api" > .env
+
+# Start the development server
+npm run dev
+```
+
+Frontend will be running at: `http://localhost:5173`
 
 ---
 
-### 3. Frontend Setup (React + Vite)
+## 🔐 Environment Variables
 
-1. **Open a New Terminal Window** (Leave the backend running).
+### Backend (`backend/.env`)
 
-2. **Navigate to the Frontend Directory:**
-   ```bash
-   cd frontend
-   ```
+```env
+# Django
+SECRET_KEY=your-random-secret-key-here
+DEBUG=True
 
-3. **Install Node Dependencies:**
-   This will install React, Tailwind CSS, Axios, and all other required packages.
-   ```bash
-   npm install
-   ```
+# Database (MySQL for local, auto-detected on Railway)
+DATABASE_NAME=taskmanager_db
+DATABASE_USER=root
+DATABASE_PASSWORD=your_mysql_password
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+```
 
-4. **Start the Vite Development Server:**
-   ```bash
-   npm run dev
-   ```
+> ℹ️ Copy `backend/.env.example` to `backend/.env` and fill in your values.  
+> ⚠️ **Never commit the `.env` file to Git!**
 
-5. **Open the Application:**
-   Open your browser and navigate to the URL provided by Vite (usually `http://localhost:5173/`).
-   
-6. **Log In:**
-   Use the Admin credentials you created in step 7 of the backend setup to log in and start using the app!
+### Frontend (`frontend/.env`)
 
-*(Optional Data Entry: To add your first projects and members, visit `http://127.0.0.1:8000/admin` in your browser and log in with your Admin account).*
+```env
+# Local Development
+VITE_API_BASE_URL=http://127.0.0.1:8000/api
 
----
-
-## 🌐 Railway Deployment Guide
-
-This project is fully optimized to be deployed as a Monorepo on [Railway.app](https://railway.app).
-
-### Step 1: Push to GitHub
-Commit all your code and push it to a new GitHub repository.
-
-### Step 2: Create a Railway Account
-Sign up at [Railway.app](https://railway.app) and connect your GitHub account.
-
-### Step 3: Deploy the MySQL Database
-1. Click **"New Project"** -> **"Add a Plugin"** -> **"MySQL"**.
-2. Railway will automatically provision a database for you.
-
-### Step 4: Deploy the Django Backend
-1. In the same Railway project, click **"New"** -> **"GitHub Repo"** -> Select your repository.
-2. Go to the newly created service's **Settings**.
-3. Under **Build**, change the **Root Directory** to `/backend`.
-4. Go to the **Variables** tab and add the following Environment Variables:
-   - `DATABASE_URL` (Click "Add Reference" and select the URL from the MySQL plugin)
-   - `SECRET_KEY` (Generate a random string)
-   - `DEBUG` = `False`
-   - `ALLOWED_HOSTS` = `*`
-5. Go to the **Settings** tab again. Under **Deploy**, set the **Custom Start Command**:
-   ```bash
-   gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
-   ```
-6. Railway will automatically detect the `requirements.txt` and deploy your Django API. Generate a public domain for this service in the Settings tab.
-
-### Step 5: Deploy the React Frontend
-1. Click **"New"** -> **"GitHub Repo"** -> Select the *same* repository again.
-2. Go to this second service's **Settings**.
-3. Under **Build**, change the **Root Directory** to `/frontend`.
-4. Go to the **Variables** tab and add:
-   - `VITE_API_BASE_URL` = `https://your-backend-railway-domain.up.railway.app/api`
-5. Railway will automatically detect the `package.json`, build the Vite app, and serve it.
-6. Generate a public domain for the frontend service in the Settings tab.
-
-**Congratulations! Your full-stack app is now live!**
+# Production (Vercel)
+VITE_API_BASE_URL=https://team-task-manager-production-b22d.up.railway.app/api
+```
 
 ---
 
-## 📚 API Endpoints Documentation
+## 📡 API Reference
 
-The backend exposes the following RESTful endpoints. All endpoints (except Auth) require a Bearer token in the `Authorization` header.
+### Authentication Endpoints
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|:---:|
+| `POST` | `/api/auth/login/` | Login and get JWT tokens | ❌ |
+| `POST` | `/api/auth/register/` | Register a new user | ❌ |
+| `POST` | `/api/auth/token/refresh/` | Refresh access token | ❌ |
+| `GET` | `/api/auth/me/` | Get current user info | ✅ |
 
-### Authentication & Users
-- `POST /api/auth/register/` - Register a new user
-- `POST /api/auth/login/` - Obtain JWT access and refresh tokens
-- `POST /api/auth/refresh/` - Refresh the JWT access token
-- `GET /api/auth/me/` - Retrieve the currently logged-in user profile
-- `GET /api/auth/users/` - List all users (Requires Authentication)
+### Projects Endpoints
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|:---:|
+| `GET` | `/api/projects/` | List all projects | ✅ |
+| `POST` | `/api/projects/` | Create a new project | ✅ Admin |
+| `GET` | `/api/projects/:id/` | Get project details | ✅ |
+| `PUT` | `/api/projects/:id/` | Update a project | ✅ Admin |
+| `DELETE` | `/api/projects/:id/` | Delete a project | ✅ Admin |
 
-### Projects
-- `GET /api/projects/` - List all projects associated with the logged-in user
-- `POST /api/projects/` - Create a new project (Admin Only)
-- `GET /api/projects/{id}/` - Retrieve details of a specific project
-- `PUT /api/projects/{id}/` - Update a project (Admin Only)
-- `DELETE /api/projects/{id}/` - Delete a project (Admin Only)
+### Tasks Endpoints
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|:---:|
+| `GET` | `/api/projects/:id/tasks/` | List tasks for a project | ✅ |
+| `POST` | `/api/projects/:id/tasks/` | Create a task | ✅ |
+| `PATCH` | `/api/tasks/:id/` | Update task status | ✅ |
+| `DELETE` | `/api/tasks/:id/` | Delete a task | ✅ Admin |
 
-### Project Members
-- `POST /api/projects/{id}/members/` - Add a user to a project (Admin Only)
-- `DELETE /api/projects/{id}/members/{user_id}/` - Remove a user from a project (Admin Only)
+### Dashboard
+| Method | Endpoint | Description | Auth Required |
+|--------|---------|-------------|:---:|
+| `GET` | `/api/dashboard/stats/` | Get task statistics | ✅ |
 
-### Tasks
-- `GET /api/tasks/` - List tasks assigned to the user (or all tasks managed by the Admin)
-- `POST /api/tasks/` - Create a new task (Admin Only)
-- `PATCH /api/tasks/{id}/` - Partially update a task status (e.g., move from Todo to In Progress)
-- `DELETE /api/tasks/{id}/` - Delete a task (Admin Only)
+---
 
-### Dashboard Analytics
-- `GET /api/dashboard/stats/` - Retrieve total, pending, and completed task counts for the logged-in user.
+## 🚀 Deployment Guide
+
+### Backend → Railway
+
+1. Push your code to GitHub.
+2. Go to [railway.app](https://railway.app) and create a new project.
+3. Click **New** → **Database** → **Add PostgreSQL**.
+4. Click **New** → **GitHub Repo** → select `team-task-manager`.
+5. In **Settings** → **Source**, set **Root Directory** to `backend`.
+6. In **Settings** → **Deploy**, set the **Start Command**:
+   ```bash
+   python manage.py collectstatic --noinput && python manage.py migrate && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT
+   ```
+7. In **Variables** tab, add:
+   ```
+   SECRET_KEY     = <random-string>
+   DEBUG          = False
+   ALLOWED_HOSTS  = *
+   DATABASE_URL   = <paste POSTGRES_URL from your PostgreSQL service>
+   ```
+8. In **Settings** → **Networking**, click **Generate Domain**.
+
+### Frontend → Vercel
+
+1. Go to [vercel.com](https://vercel.com) and click **Add New Project**.
+2. Import your `team-task-manager` GitHub repository.
+3. Set **Root Directory** to `frontend`.
+4. Add **Environment Variable**:
+   ```
+   VITE_API_BASE_URL = https://your-railway-domain.up.railway.app/api
+   ```
+5. Click **Deploy**.
+
+---
+
+## 🔄 Updating Production
+
+After making changes locally:
+
+```bash
+git add .
+git commit -m "Your update message"
+git push
+```
+
+Both Railway (backend) and Vercel (frontend) will automatically detect the new commit and redeploy within minutes.
+
+---
+
+## 👤 Default Credentials (Local)
+
+After running `createsuperuser`, use the credentials you set.  
+In production, the admin account is created via the Railway start command.
+
+| Field | Value |
+|-------|-------|
+| Email | admin@admin.com |
+| Password | (set during createsuperuser) |
+| Role | Admin |
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+
+Built with ❤️ using **Django** + **React** + **Railway** + **Vercel**
+
+[🌐 Live Demo](https://team-task-manager-sigma-henna.vercel.app/) · [⚙️ API](https://team-task-manager-production-b22d.up.railway.app/api/) · [📦 GitHub](https://github.com/Abhineshlodhi/team-task-manager)
+
+</div>
