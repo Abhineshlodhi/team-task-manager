@@ -10,16 +10,19 @@ const ProjectDetail = () => {
   const [tasks, setTasks] = useState([]);
   const { user } = useContext(AuthContext);
 
+  const [error, setError] = useState('');
+
   const fetchProjectData = async () => {
     try {
       const [projectRes, tasksRes] = await Promise.all([
         api.get(`/projects/${id}/`),
-        api.get('/tasks/') // Filtering should happen, but for simplicity we filter client side or API needs custom endpoint. Let's assume API filters by user's assigned/managed tasks and we filter by project ID here.
+        api.get('/tasks/')
       ]);
       setProject(projectRes.data);
       setTasks(tasksRes.data.filter(t => t.project === parseInt(id)));
     } catch (err) {
       console.error(err);
+      setError(err.message || 'Error loading data');
     }
   };
 
@@ -36,6 +39,7 @@ const ProjectDetail = () => {
     }
   };
 
+  if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
   if (!project) return <div className="p-8 text-center">Loading project details...</div>;
 
   return (

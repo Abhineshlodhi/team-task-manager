@@ -16,8 +16,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.role == 'Admin':
-            return Project.objects.filter(created_by=user) | Project.objects.filter(members__user=user)
-        return Project.objects.filter(members__user=user)
+            return (Project.objects.filter(created_by=user) | Project.objects.filter(members__user=user)).distinct()
+        return Project.objects.filter(members__user=user).distinct()
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -53,8 +53,8 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         if user.role == 'Admin':
-            return Task.objects.filter(project__created_by=user) | Task.objects.filter(project__members__user=user)
-        return Task.objects.filter(assigned_to=user) | Task.objects.filter(project__members__user=user)
+            return (Task.objects.filter(project__created_by=user) | Task.objects.filter(project__members__user=user)).distinct()
+        return (Task.objects.filter(assigned_to=user) | Task.objects.filter(project__members__user=user)).distinct()
 
     def get_permissions(self):
         if self.action in ['create', 'destroy']:
@@ -85,9 +85,9 @@ class DashboardStatsView(APIView):
     def get(self, request):
         user = request.user
         if user.role == 'Admin':
-            tasks = Task.objects.filter(project__created_by=user) | Task.objects.filter(project__members__user=user)
+            tasks = (Task.objects.filter(project__created_by=user) | Task.objects.filter(project__members__user=user)).distinct()
         else:
-            tasks = Task.objects.filter(assigned_to=user)
+            tasks = Task.objects.filter(assigned_to=user).distinct()
 
         total_tasks = tasks.count()
         completed_tasks = tasks.filter(status='Completed').count()
